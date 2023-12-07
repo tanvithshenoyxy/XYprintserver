@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "DLI0b0k4xtZrWIahcGTRRZ3qvWSsQ7pherWJKxd9mjTwbZ/Uw/jEFp5ZN78EAH3L3GS6WxQw+Of/Xbrepj/xhQ==",
+  "dgSpecHash": "DO52gV0ow43ftkwmfawehEO4zbloDhZBAvFvbRZiZ3lszzEjDL7x6yMK5a4o9t8c8QVET2eFV8aePoPau8O66Q==",
   "success": true,
-  "projectFilePath": "C:\\Users\\HP\\Desktop\\XYWinService\\src\\src\\WinServiceDemo.Console\\WinServiceDemo.Console.csproj",
+  "projectFilePath": "C:\\Users\\HP\\Downloads\\wetransfer_src_2023-12-07_1234 (2)\\wetransfer_src_2023-12-07_1234\\src\\WinServiceDemo.Console\\WinServiceDemo.Console.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\HP\\.nuget\\packages\\microsoft.netcore.platforms\\2.0.0\\microsoft.netcore.platforms.2.0.0.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\microsoft.win32.registry\\4.5.0\\microsoft.win32.registry.4.5.0.nupkg.sha512",

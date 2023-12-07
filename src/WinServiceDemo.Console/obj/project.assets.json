@@ -647,11 +647,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\HP\\Desktop\\XYWinService\\src\\src\\WinServiceDemo.Console\\WinServiceDemo.Console.csproj",
+      "projectUniqueName": "C:\\Users\\HP\\Downloads\\wetransfer_src_2023-12-07_1234 (2)\\wetransfer_src_2023-12-07_1234\\src\\WinServiceDemo.Console\\WinServiceDemo.Console.csproj",
       "projectName": "WinServiceDemo.Console",
-      "projectPath": "C:\\Users\\HP\\Desktop\\XYWinService\\src\\src\\WinServiceDemo.Console\\WinServiceDemo.Console.csproj",
+      "projectPath": "C:\\Users\\HP\\Downloads\\wetransfer_src_2023-12-07_1234 (2)\\wetransfer_src_2023-12-07_1234\\src\\WinServiceDemo.Console\\WinServiceDemo.Console.csproj",
       "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\HP\\Desktop\\XYWinService\\src\\src\\WinServiceDemo.Console\\obj\\",
+      "outputPath": "C:\\Users\\HP\\Downloads\\wetransfer_src_2023-12-07_1234 (2)\\wetransfer_src_2023-12-07_1234\\src\\WinServiceDemo.Console\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
