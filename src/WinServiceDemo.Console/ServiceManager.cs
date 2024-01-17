@@ -21,27 +21,37 @@ namespace WinServiceDemo.Console
     /// </summary>
     public class ServiceManager
     {
-        private double TimerInterval; //10 seconds
+        private static double PollInterval;//5 seconds
+        private static double HeartBeat; //15 seconds
+        private static double ConfigInterval; //120 seconds
+        private static double status;
+        private static string server;
+      
         private Timer _timer;
+        private Timer _timer2;
 
         //private static readonly TimeSpan PollingInterval = TimeSpan.FromMinutes(5);
         static HttpClient _httpClient;
         private static Dictionary<string, Printer> printerCache;// = new Dictionary<string, Printer>();
-
         static string GetPrinterRelativeURI;// = ConfigurationManager.AppSettings["Get_Printer_Relative_URI"];
         static string PrinterServerID;// = ConfigurationManager.AppSettings["print_server_id"];
         static string AuthKey;// = ConfigurationManager.AppSettings["auth_key"];
         static string AuthValue;//= ConfigurationManager.AppSettings["auth_value"];
+        static string AuthValueRefresh; // New authvalue for the endpoint that needs to be called in order to get the refresh config,authkey remains the same
         static string baseURI;// = ConfigurationManager.AppSettings["ApiBaseUrl"];
+        static string RefreshBaseURI; //New Base URI to get the refresh config
+        static string RefreshApiEndpoint; //New Endpoint to get the refresh config
+        static string RefreshRelativeURI; //New Relative URI to get the refresh config {Endpoint + print server id}
         static string GetPrinterQueueRelativeURI;
         static string UpdatePrinterURI;
         static string Interval;
         static bool iProcessed = false;
+        
 
         /// <summary>
         /// Starts the service
         /// </summary>
-        public void Start()
+        public async void Start()
         {
 
 
@@ -49,7 +59,13 @@ namespace WinServiceDemo.Console
 
             AuthValue = ConfigurationManager.AppSettings["auth_value"];
 
-            baseURI = ConfigurationManager.AppSettings["ApiBaseUrl"];
+            AuthValueRefresh = ConfigurationManager.AppSettings["auth_value_refresh"];
+
+            RefreshBaseURI = ConfigurationManager.AppSettings["ApiRefreshBaseUrl"];
+
+            RefreshApiEndpoint = ConfigurationManager.AppSettings["ApiRefreshEndPoint"];
+
+            RefreshRelativeURI = RefreshApiEndpoint + PrinterServerID;
 
             GetPrinterRelativeURI = ConfigurationManager.AppSettings["Get_Printer_Relative_URI"];
 
@@ -59,16 +75,41 @@ namespace WinServiceDemo.Console
 
             UpdatePrinterURI = ConfigurationManager.AppSettings["Update_Printer_URI"];
 
-            Interval = ConfigurationManager.AppSettings["Interval"];
+            //Interval = ConfigurationManager.AppSettings["Interval"];
 
-            TimerInterval = String.IsNullOrEmpty(Interval) ? 5000 : Convert.ToInt32(Interval);
+            await GetRefreshConfig(); // new function created to fetch the refresh config json
 
-            GetPrinterDetails();
+            await GetPrinterDetails(); // get printer details
 
-            _timer = new Timer(TimerInterval);
+            _timer = new Timer(PollInterval);
             _timer.Elapsed += Process;
             _timer.Start();
+
+            /*_timer2 = new Timer(ConfigInterval);
+            _timer.Elapsed += Process2;
+            _timer2.Start();*/
+
+            
         }
+
+        /*private void Process2(object sender, ElapsedEventArgs e)
+        {
+            _timer2.Enabled = false;
+
+            try
+            {
+                Task.Run(async () => await GetRefreshConfig()).Wait();
+            }
+            catch(Exception ex)
+            {
+
+            }
+
+            _timer2.Interval = ConfigInterval;
+            _timer2.Enabled = true;
+
+            
+        }*/
 
         /// <summary>
         /// Stops the service
@@ -89,8 +130,8 @@ namespace WinServiceDemo.Console
 
             try
             {
-                //Task.Run(async () => await GetPrinterDetails()).Wait();
                 Task.Run(async () => await GetQueueDocuments()).Wait();
+                
             }
             catch (Exception ex)
             {
@@ -98,17 +139,67 @@ namespace WinServiceDemo.Console
             }
 
 
-            _timer.Interval = TimerInterval;
+            _timer.Interval = PollInterval;
             _timer.Enabled = true;
         }
 
+        public static async Task GetRefreshConfig()
+        {
+            try
+            {
 
+                Uri baseUrI = new Uri(RefreshBaseURI, UriKind.Absolute);
+
+
+                Uri relativeUri = new Uri(RefreshRelativeURI, UriKind.Relative);
+
+                Uri fullUri = new Uri(baseUrI, relativeUri);
+
+                HttpClientHandler handler = new HttpClientHandler()
+                {
+                    AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+                };
+
+                using (var client = new HttpClient(handler)) //see update below
+                {
+                    client.DefaultRequestHeaders.Add(AuthKey, AuthValueRefresh);
+                    var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, fullUri);
+
+
+                    var httpResponse = await client.SendAsync(httpRequestMessage);
+
+                    if (httpResponse.IsSuccessStatusCode)
+                    {
+
+                        string responseBody = await httpResponse.Content.ReadAsStringAsync();
+
+                        JObject json = JObject.Parse(responseBody);
+
+                        server = json["output"]["response"]["$value"]["server"].ToString();
+                        PollInterval = Convert.ToInt32(json["output"]["response"]["$value"]["pollInterval"]);
+                        HeartBeat = Convert.ToInt32(json["output"]["response"]["$value"]["heartbeat"]);
+                        ConfigInterval = Convert.ToInt32(json["output"]["response"]["$value"]["configInterval"]);
+                        status = Convert.ToInt32(json["output"]["response"]["$value"]["status"]);
+                        ServiceManager.baseURI = "https://" + server + "/ _s /";
+
+                    }
+                }
+
+
+
+            }
+            catch(Exception e)
+            {
+
+            }
+
+        }
 
         public static async Task GetPrinterDetails()
         {
 
             _httpClient = new HttpClient();
-            Uri baseUrI = new Uri(baseURI, UriKind.Absolute);
+            Uri baseUrI =  new Uri(baseURI, UriKind.Absolute);
             Uri relativeUri = new Uri(GetPrinterRelativeURI, UriKind.Relative);
 
             Uri fullUri = new Uri(baseUrI, relativeUri);

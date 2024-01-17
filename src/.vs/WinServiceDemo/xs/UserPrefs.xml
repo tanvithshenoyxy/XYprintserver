@@ -1,0 +1,33 @@
+﻿<Properties StartupConfiguration="{A77055C3-EABC-4CBB-A159-29CD2BC21E08}|Default">
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workbench ActiveDocument="WinServiceDemo.Console/ServiceManager.cs">
+    <Files>
+      <File FileName="WinServiceDemo.Console/ServiceManager.cs" Line="189" Column="1" />
+      <File FileName="WinServiceDemo.Console/Program.cs" Line="27" Column="50" />
+      <File FileName="WinServiceDemo.Console/PrintStatus.cs" Line="1" Column="1" />
+      <File FileName="WinServiceDemo.Console/PrinterDetails.cs" Line="1" Column="1" />
+      <File FileName="WinServiceDemo.Console/PrintDocumentDetails.cs" Line="1" Column="1" />
+      <File FileName="WinServiceDemo.Console/App.config" Line="10" Column="26" />
+      <File FileName="WinServiceDemo.Console/LogHelper.cs" Line="1" Column="1" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="WinServiceDemo" expanded="True" selected="True">
+            <Node name="WinServiceDemo.Console" expanded="True">
+              <Node name="Dependencies" expanded="True">
+                <Node name="FrameworkReferences" expanded="True" />
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.ItemProperties.WinServiceDemo.Console PreferredExecutionTarget="MonoDevelop.Default" />
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+</Properties>
